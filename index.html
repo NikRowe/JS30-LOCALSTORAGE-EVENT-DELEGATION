@@ -55,7 +55,7 @@
     const addItems = document.querySelector('.add-items');
     const removeItems = document.querySelector('.remove-items');
     const itemsList = document.querySelector('.meals');
-    const items = JSON.parse(localStorage.getItem("items")) || []
+    let items = JSON.parse(localStorage.getItem("items")) || []
 
     function addItem(e) {
       e.preventDefault() // forms reload the page && || send data somewhere - this stops that // 
@@ -73,10 +73,11 @@
 
     function removeItem(e) {
       e.preventDefault()
-      items.map((item, i) => {
-        item.done ? items.splice(i,1) : ''
+      const filteredItems = items.filter((item, i) => {
+        return !item.done
       })
-
+      
+      items = filteredItems
       populateList(items, itemsList)
       localStorage.setItem('items', JSON.stringify(items))
       console.log(items)
