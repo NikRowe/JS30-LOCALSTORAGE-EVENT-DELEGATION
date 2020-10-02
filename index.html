@@ -40,15 +40,20 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
-    <form class='remove-items'>
-      <input type="submit" name="remove" value="💨 Remove">
+    <form class='remove-items bonusBtn'>
+      <input type="submit" name="remove" class="remove" value="💨 Remove">
+    </form>
+    <form class="reset bonusBtn">
       <input type="submit" name="reset" value="⚫  Reset">
+    </form>
+    <form class="check-all bonusBtn">
       <input type="submit" name="checkAll" value="✔ Check All">
     </form>
   </div>
 
   <script>
     const addItems = document.querySelector('.add-items');
+    const removeItems = document.querySelector('.remove-items');
     const itemsList = document.querySelector('.meals');
     const items = JSON.parse(localStorage.getItem("items")) || []
 
@@ -61,11 +66,22 @@
       }
 
       items.push(item)
-      populateList(items, itemsList) 
+      populateList(items, itemsList)
       localStorage.setItem('items', JSON.stringify(items)) // puts items into localStorage // 
       this.reset()
     }
-    
+
+    function removeItem(e) {
+      e.preventDefault()
+      items.map((item, i) => {
+        item.done ? items.splice(i,1) : ''
+      })
+
+      populateList(items, itemsList)
+      localStorage.setItem('items', JSON.stringify(items))
+      console.log(items)
+    }
+
     function populateList(meals = [], mealsList) {
       mealsList.innerHTML = meals.map((meal, i) => {
         return `
@@ -74,19 +90,20 @@
           <label for="item${i}">${meal.text}</label>
           </li>
           `
-        }).join('') // turns the array from map() and makes its a string for the innerHTML() //
-      }
-      
-      function toggleDone(e) {
-        if(!e.target.matches('input')) return // only do lines below if e.target is an input //
-        const el = e.target
-        const index = el.dataset.index
-        items[index].done = !items[index].done
-        localStorage.setItem('items', JSON.stringify(items)) // puts items into localStorage // 
-        populateList(items, itemsList) // loads any local state on page load //
+      }).join('') // turns the array from map() and makes its a string for the innerHTML() //
+    }
+
+    function toggleDone(e) {
+      if (!e.target.matches('input')) return // only do lines below if e.target is an input //
+      const el = e.target
+      const index = el.dataset.index
+      items[index].done = !items[index].done
+      localStorage.setItem('items', JSON.stringify(items)) // puts items into localStorage // 
+      populateList(items, itemsList) // loads any local state on page load //
     }
 
     addItems.addEventListener('submit', addItem)
+    removeItems.addEventListener('submit', removeItem)
     itemsList.addEventListener('click', toggleDone)
 
     populateList(items, itemsList) // loads any local state on page load //
