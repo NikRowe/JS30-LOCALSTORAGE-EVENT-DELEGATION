@@ -60,20 +60,25 @@
       localStorage.setItem('items', JSON.stringify(items)) // puts items into localStorage // 
       this.reset()
     }
-
+    
     function populateList(meals = [], mealsList) {
       mealsList.innerHTML = meals.map((meal, i) => {
         return `
         <li>
           <input type="checkbox" data-index=${i} id="item${i}" ${meal.done ? 'checked' : ''}/>
           <label for="item${i}">${meal.text}</label>
-        </li>
-      `
-      }).join('') // turns the array from map() and makes its a string for the innerHTML() //
-    }
-
-    function toggleDone(e) {
+          </li>
+          `
+        }).join('') // turns the array from map() and makes its a string for the innerHTML() //
+      }
       
+      function toggleDone(e) {
+        if(!e.target.matches('input')) return // only do lines below if e.target is an input //
+        const el = e.target
+        const index = el.dataset.index
+        items[index].done = !items[index].done
+        localStorage.setItem('items', JSON.stringify(items)) // puts items into localStorage // 
+        populateList(items, itemsList) // loads any local state on page load //
     }
 
     addItems.addEventListener('submit', addItem)
