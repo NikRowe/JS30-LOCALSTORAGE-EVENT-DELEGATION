@@ -55,6 +55,7 @@
     const addItems = document.querySelector('.add-items');
     const removeItems = document.querySelector('.remove-items');
     const resetItems = document.querySelector('.reset-items');
+    const allItems = document.querySelector('.check-all');
     const itemsList = document.querySelector('.meals');
     let items = JSON.parse(localStorage.getItem("items")) || []
 
@@ -83,12 +84,28 @@
       localStorage.setItem('items', JSON.stringify(items))
       console.log(items)
     }
-    
+
     function resetItem(e) {
       e.preventDefault()
       items.splice(0)
       populateList(items, itemsList)
       localStorage.setItem('items', JSON.stringify(items))
+    }
+
+    function checkAll(e) {
+      e.preventDefault()
+      let allChecked = items.every(item => item.done)
+      allChecked
+        ? items.forEach(item => {
+          item.done = !item.done
+        })
+        : items.forEach(item => {
+          !item.done ? item.done = true : ''
+        })
+
+      populateList(items, itemsList)
+      localStorage.setItem('items', JSON.stringify(items))
+      console.log(items)
     }
 
     function populateList(meals = [], mealsList) {
@@ -114,6 +131,7 @@
     addItems.addEventListener('submit', addItem)
     removeItems.addEventListener('submit', removeItem)
     resetItems.addEventListener('submit', resetItem)
+    allItems.addEventListener('submit', checkAll)
     itemsList.addEventListener('click', toggleDone)
 
     populateList(items, itemsList) // loads any local state on page load //
