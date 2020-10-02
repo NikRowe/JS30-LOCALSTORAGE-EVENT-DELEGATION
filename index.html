@@ -40,6 +40,11 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <form class='remove-items'>
+      <input type="submit" name="remove" value="💨 Remove">
+      <input type="submit" name="reset" value="⚫  Reset">
+      <input type="submit" name="checkAll" value="✔ Check All">
+    </form>
   </div>
 
   <script>
@@ -85,6 +90,7 @@
     itemsList.addEventListener('click', toggleDone)
 
     populateList(items, itemsList) // loads any local state on page load //
+    console.clear()
 
   </script>
 
